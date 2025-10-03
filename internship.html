@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Personal Blog</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; background: #f9f9f9; color: #333; }
+    a { text-decoration: none; color: inherit; }
+    section { padding: 20px; }
+
+    /* Navbar */
+    header {
+      background: #222; color: #fff;
+      padding: 15px 30px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 1000;
+    }
+    header h1 { font-size: 22px; }
+    nav ul { display: flex; list-style: none; gap: 20px; }
+    nav a { color: #fff; transition: 0.3s; }
+    nav a:hover { color: #f39c12; }
+
+    /* Blog Posts Grid */
+    .posts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px; padding: 20px;
+    }
+    .post-card {
+      background: white; padding: 20px; border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .post-card:hover { transform: translateY(-5px); }
+    .post-card h2 { margin-bottom: 10px; font-size: 20px; }
+    .post-card p { color: #666; }
+
+    /* Single Post */
+    .post-detail {
+      max-width: 800px; margin: 30px auto;
+      background: white; padding: 20px; border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .post-detail.active { display: block; }
+
+    /* Footer */
+    footer {
+      text-align: center; background: #222; color: #fff;
+      padding: 15px; margin-top: 30px;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      nav ul { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <ul>
+        <li><a href="#" onclick="showHome()">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Blog Posts List -->
+  <section id="home">
+    <div class="posts-container" id="posts-container"></div>
+  </section>
+
+  <!-- Single Post Detail -->
+  <section>
+    <article class="post-detail" id="post-detail"></article>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>©️ 2025 My Blog. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Blog posts data (could be fetched from API/JSON in real apps)
+    const posts = [
+      {
+        id: 1,
+        title: "My First Blog Post",
+        excerpt: "This is a quick preview of my first blog post...",
+        date: "2025-01-01",
+        content: "<p>Welcome to my first blog post! This is where I share my journey.</p><p>Stay tuned for more content!</p>"
+      },
+      {
+        id: 2,
+        title: "Learning Web Development",
+        excerpt: "A guide to starting your web development journey...",
+        date: "2025-01-15",
+        content: "<p>Web development is fun and creative! Start with HTML, CSS, and JavaScript.</p>"
+      },
+      {
+        id: 3,
+        title: "Why Responsive Design Matters",
+        excerpt: "Mobile-first design is no longer optional, it’s essential...",
+        date: "2025-02-01",
+        content: "<p>Responsive design ensures your website looks great on all devices, from desktops to smartphones.</p>"
+      }
+    ];
+
+    const postsContainer = document.getElementById("posts-container");
+    const postDetail = document.getElementById("post-detail");
+
+    // Load all posts on home page
+    function loadPosts() {
+      postsContainer.innerHTML = posts.map(post => `
+        <div class="post-card">
+          <h2>${post.title}</h2>
+          <p>${post.excerpt}</p>
+          <button onclick="viewPost(${post.id})">Read More</button>
+        </div>
+      `).join("");
+    }
+
+    // Show single post
+    function viewPost(id) {
+      const post = posts.find(p => p.id === id);
+      postDetail.innerHTML = `
+        <h1>${post.title}</h1>
+        <p><em>${post.date}</em></p>
+        <div>${post.content}</div>
+        <br>
+        <button onclick="showHome()">← Back to Home</button>
+      `;
+      postDetail.classList.add("active");
+      document.getElementById("home").style.display = "none";
+    }
+
+    // Back to home
+    function showHome() {
+      postDetail.classList.remove("active");
+      document.getElementById("home").style.display = "block";
+    }
+
+    // Initialize
+    loadPosts();
+  </script>
+</body>
+</html>
